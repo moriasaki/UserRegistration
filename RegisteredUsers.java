@@ -19,22 +19,23 @@ public class RegisteredUsers extends UserRegistration {
 
     @Override
     public String toString() {
-        StringBuilder trips = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n===== Registered User =====\n");
+        sb.append("Full Name: ").append(getFullName()).append("\n");
+        sb.append("Email: ").append(getEmailAddress()).append("\n");
+        sb.append("DOB: ").append(getDateOfBirth()).append("\n");
+        sb.append("Card: ").append(getCardNumber()).append("\n");
+        sb.append("Expiry: ").append(getCardExpiryDate()).append("\n");
+        sb.append("Provider: ").append(getCardProvider()).append("\n");
+        sb.append("CVV: ").append(getCvv()).append("\n");
+        sb.append("Type: ").append(getUserType()).append("\n");
+        sb.append("Last three trips:\n");
+
         if (lastThreeTrips != null) {
             for (String trip : lastThreeTrips) {
-                trips.append(trip).append(" | ");
+                sb.append("- ").append(trip).append("\n");
             }
-        } else {
-            trips.append("No trips");
         }
-
-        return "===== User Info =====\n" +
-                "Full Name: " + getFullName() + "\n" +
-                "Email: " + getEmailAddress() + "\n" +
-                "Date of Birth: " + getDateOfBirth() + "\n" +
-                "Card Number: " + getCardNumber() + "\n" +
-                "Card Provider: " + getCardProvider() + "\n" +
-                "User Type: " + getUserType() + "\n" +
-                "Last 3 Trips: " + trips + "\n";
+        return sb.toString();
     }
 }
