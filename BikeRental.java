@@ -9,7 +9,6 @@ public class BikeRental {
     public BikeRental() {
         scanner = new Scanner(System.in);
         bikeService = new BikeService();
-        rentalService = new RentalService();
         userReg = new UserRegistration();
     }
 

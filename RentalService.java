@@ -1,36 +1,38 @@
 import java.time.LocalDateTime;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
+
 public class RentalService {
-    private LinkedList<ActiveRental> activeRentalsList;
+    private List<String> activeRentals;
+    private BikeService bikeService;
 
-    public RentalService() {
-        activeRentalsList = new LinkedList<>();
+    public RentalService(BikeService bikeService) {
+        activeRentals = new ArrayList<>();
+        this.bikeService = bikeService;
     }
 
-    public void startRental(String bikeID, String email) {
-        LocalDateTime startTime = LocalDateTime.now();
-        ActiveRental rental = new ActiveRental(bikeID, email, startTime);
-        activeRentalsList.add(rental);
+    public void startRental(String bikeId, String userEmail) {
+        activeRentals.add(bikeId);
+
+        ERyderLog log = new ERyderLog(
+            "LOG-" + System.currentTimeMillis(),
+            "Trip started: " + bikeId + " User: " + userEmail,
+            LocalDateTime.now()
+        );
     }
 
-    public void endRental(String bikeID) {
-        Iterator<ActiveRental> iterator = activeRentalsList.iterator();
-        while (iterator.hasNext()) {
-            ActiveRental ar = iterator.next();
-            if (ar.getBikeID().equals(bikeID)) {
-                iterator.remove();
-                break;
-            }
-        }
+    public void endRental(String bikeId) {
+        activeRentals.remove(bikeId);
+        bikeService.releaseBike(bikeId);
+
+        ERyderLog log = new ERyderLog(
+            "LOG-" + System.currentTimeMillis(),
+            "Trip ended: " + bikeId,
+            LocalDateTime.now()
+        );
     }
+
     public void viewActiveRentals() {
-        if (activeRentalsList.isEmpty()) {
-            System.out.println("No active rentals at the moment.");
-            return;
-        }
-        for (ActiveRental ar : activeRentalsList) {
-            System.out.println(ar);
-        }
+        System.out.println("Active Rentals: " + activeRentals);
     }
 }
