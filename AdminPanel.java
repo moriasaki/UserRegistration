@@ -21,22 +21,37 @@ public class AdminPanel {
             System.out.println("4. Update Registered Users");
             System.out.println("5. EXIT");
             System.out.println("6. Demo the Bike Rental System");
-            System.out.println("7. View All Bikes Status"); // 新增：查看所有单车状态
+            System.out.println("7. View All Bikes Status");
             System.out.print("Enter your choice: ");
             String choice = scanner.nextLine();
-
             switch (choice) {
-                case "1": addNewUsers(); break;
-                case "2": viewRegisteredUsers(); break;
-                case "3": removeRegisteredUsers(); break;
-                case "4": updateRegisteredUsers(); break;
-                case "5": System.out.println("Exiting..."); return;
-                case "6": bikeRental.simulateApplicationInput(); break;
-                case "7": viewAllBikesStatus(); break; // 新增分支
-                default: System.out.println("Invalid choice. Please try again");
+                case "1":
+                    addNewUsers();
+                    break;
+                case "2":
+                    viewRegisteredUsers();
+                    break;
+                case "3":
+                    removeRegisteredUsers();
+                    break;
+                case "4":
+                    updateRegisteredUsers();
+                    break;
+                case "5":
+                    System.out.println("Exiting...");
+                    return;
+                case "6":
+                    bikeRental.simulateApplicationInput();
+                    break;
+                case "7":
+                    viewAllBikesStatus();
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again");
             }
         }
     }
+
     private void addNewUsers() {
         System.out.print("Enter number of users to add: ");
         int count;
@@ -56,7 +71,7 @@ public class AdminPanel {
             String fullName = scanner.nextLine().trim();
             if (fullName.isEmpty()) {
                 System.out.println("Full name cannot be empty!");
-                i--; 
+                i--;
                 continue;
             }
             System.out.print("Email Address: ");
@@ -96,18 +111,24 @@ public class AdminPanel {
             String[] trips = new String[3];
             System.out.println("\nEnter last three trips:");
             for (int j = 0; j < 3; j++) {
-                System.out.print("Trip " + (j+1) + " date: "); String d = scanner.nextLine();
-                System.out.print("Source: "); String s = scanner.nextLine();
-                System.out.print("Destination: "); String de = scanner.nextLine();
-                System.out.print("Fare (€): "); String f = scanner.nextLine();
-                System.out.print("Feedback: "); String fb = scanner.nextLine();
+                System.out.print("Trip " + (j+1) + " date: ");
+                String d = scanner.nextLine();
+                System.out.print("Source: ");
+                String s = scanner.nextLine();
+                System.out.print("Destination: ");
+                String de = scanner.nextLine();
+                System.out.print("Fare (€): ");
+                String f = scanner.nextLine();
+                System.out.print("Feedback: ");
+                String fb = scanner.nextLine();
                 trips[j] = "Date: "+d+", Source: "+s+", Destination: "+de+", Fare: "+f+", Feedback: "+fb;
             }
-            RegisteredUsers user = new RegisteredUsers(fullName, email, dob, card, exp, provider, cvv, type, trips);
-            userService.addUser(user);
+            RegisteredUsers createdUser = userService.addNewUser(fullName, email, dob, card, exp, provider, cvv, type, trips);
             System.out.println("User added successfully.");
+            bikeRental.simulateApplicationInput(createdUser);
         }
     }
+
     private void viewRegisteredUsers() {
         if (userService.getAllUsers().isEmpty()) {
             System.out.println("No registered users to display");
@@ -118,6 +139,7 @@ public class AdminPanel {
             System.out.println(u);
         }
     }
+
     private void removeRegisteredUsers() {
         if (userService.getAllUsers().isEmpty()) {
             System.out.println("No registered users to remove");
@@ -132,6 +154,7 @@ public class AdminPanel {
             System.out.println("No user found with this email address");
         }
     }
+
     private void updateRegisteredUsers() {
         if (userService.getAllUsers().isEmpty()) {
             System.out.println("No registered users to update");
@@ -144,32 +167,58 @@ public class AdminPanel {
             System.out.println("No user found with this email address");
             return;
         }
-
         System.out.println("\nUpdate user info (Press ENTER for no change)");
-        System.out.print("New full name: "); String fn = scanner.nextLine(); if (!fn.isEmpty()) target.setFullName(fn);
-        System.out.print("New DOB: "); String dob = scanner.nextLine(); if (!dob.isEmpty()) target.setDateOfBirth(dob);
-        System.out.print("New card: "); String cn = scanner.nextLine(); if (!cn.isEmpty()) target.setCardNumber(cn);
-        System.out.print("New expiry: "); String exp = scanner.nextLine(); if (!exp.isEmpty()) target.setCardExpiryDate(exp);
-        System.out.print("New provider: "); String cp = scanner.nextLine(); if (!cp.isEmpty()) target.setCardProvider(cp);
-        System.out.print("New CVV: "); String cvv = scanner.nextLine(); if (!cvv.isEmpty()) target.setCvv(cvv);
-        System.out.print("New type: "); String ut = scanner.nextLine(); if (!ut.isEmpty()) target.setUserType(ut);
+        System.out.print("New full name: ");
+        String fn = scanner.nextLine();
+        if (!fn.isEmpty())
+            target.setFullName(fn);
+        System.out.print("New DOB: ");
+        String dob = scanner.nextLine();
+        if (!dob.isEmpty())
+            target.setDateOfBirth(dob);
+        System.out.print("New card: ");
+        String cn = scanner.nextLine();
+        if (!cn.isEmpty())
+            target.setCardNumber(cn);
+        System.out.print("New expiry: ");
+        String exp = scanner.nextLine();
+        if (!exp.isEmpty())
+            target.setCardExpiryDate(exp);
+        System.out.print("New provider: ");
+        String cp = scanner.nextLine();
+        if (!cp.isEmpty())
+            target.setCardProvider(cp);
+        System.out.print("New CVV: ");
+        String cvv = scanner.nextLine();
+        if (!cvv.isEmpty())
+            target.setCvv(cvv);
+        System.out.print("New type: ");
+        String ut = scanner.nextLine();
+        if (!ut.isEmpty())
+            target.setUserType(ut);
         System.out.println("\nUpdate last three trips? (y/n): ");
         String updateTrips = scanner.nextLine();
         if (updateTrips.equalsIgnoreCase("y")) {
             String[] newTrips = new String[3];
             System.out.println("Enter new last three trips:");
             for (int j = 0; j < 3; j++) {
-                System.out.print("Trip " + (j+1) + " date: "); String d = scanner.nextLine();
-                System.out.print("Source: "); String s = scanner.nextLine();
-                System.out.print("Destination: "); String de = scanner.nextLine();
-                System.out.print("Fare (€): "); String f = scanner.nextLine();
-                System.out.print("Feedback: "); String fb = scanner.nextLine();
+                System.out.print("Trip " + (j+1) + " date: ");
+                String d = scanner.nextLine();
+                System.out.print("Source: ");
+                String s = scanner.nextLine();
+                System.out.print("Destination: ");
+                String de = scanner.nextLine();
+                System.out.print("Fare (€): ");
+                String f = scanner.nextLine();
+                System.out.print("Feedback: ");
+                String fb = scanner.nextLine();
                 newTrips[j] = "Date: "+d+", Source: "+s+", Destination: "+de+", Fare: "+f+", Feedback: "+fb;
             }
             target.setLastThreeTrips(newTrips);
         }
         System.out.println("User updated successfully.");
     }
+
     private void viewAllBikesStatus() {
         System.out.println("\n--- All Bikes Status ---");
         if (BikeDatabase.bikes.isEmpty()) {

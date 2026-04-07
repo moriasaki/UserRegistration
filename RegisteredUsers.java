@@ -9,6 +9,14 @@ public class RegisteredUsers extends UserRegistration {
         this.lastThreeTrips = lastThreeTrips;
     }
 
+    public double calculateFare(double baseFare) {
+        return baseFare;
+    }
+
+    public void displayUserType() {
+        System.out.println("Regular User");
+    }
+
     public String[] getLastThreeTrips() {
         return lastThreeTrips;
     }
@@ -30,7 +38,6 @@ public class RegisteredUsers extends UserRegistration {
         sb.append("CVV: ").append(getCvv()).append("\n");
         sb.append("Type: ").append(getUserType()).append("\n");
         sb.append("Last three trips:\n");
-
         if (lastThreeTrips != null) {
             for (String trip : lastThreeTrips) {
                 sb.append("- ").append(trip).append("\n");
